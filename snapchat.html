@@ -295,8 +295,11 @@
 (function() {
   'use strict';
 
-  // Free CORS proxy for file:// origins
-  const PROXY = 'https://api.allorigins.win/raw?url=';
+  // ============================================================
+  //  FIXED: Use /json instead of /raw — adds CORS headers!
+  //  The response format is: { contents: "<stringified JSON>" }
+  // ============================================================
+  const PROXY = 'https://api.allorigins.win/json?url=';
 
   // ======== DOM REFS ========
   const usernameInput = document.getElementById('usernameInput');
@@ -347,7 +350,9 @@
         return;
       }
 
-      const data = await resp.json();
+      // AllOrigins wraps the response in { contents: "...", status: {...} }
+      const wrapper = await resp.json();
+      const data = JSON.parse(wrapper.contents);
 
       if (!data.success) {
         showStatus(userStatus, data.error || 'Search failed.', 'error');
@@ -410,12 +415,14 @@
       const resp = await fetch(PROXY + encodeURIComponent(targetUrl), { method: 'GET', mode: 'cors' });
 
       if (!resp.ok) {
-        showStatus(combStatus, 'COMB database error (' + resp.status + ')', 'error');
+        showStatus(combStatus, 'COMB database error (' + resp.status + '). The proxy may be slow — try again.', 'error');
         combBtn.disabled = false; combBtn.textContent = 'Find Passwords';
         return;
       }
 
-      const data = await resp.json();
+      // Unwrap from AllOrigins envelope
+      const wrapper = await resp.json();
+      const data = JSON.parse(wrapper.contents);
 
       const count = data.count || 0;
       const lines = data.lines || [];
@@ -427,16 +434,13 @@
         return;
       }
 
-      // Show results
       combResults.classList.add('show');
       showStatus(combStatus, `<span class="stat-number" style="color:var(--warn)">${count.toLocaleString()}</span> total credential${count !== 1 ? 's' : ''} found (showing up to ${Math.min(lines.length, 100)})`, 'warn');
 
-      // Build table
       let tableHtml = '<table class="cred-table">';
       for (const line of lines) {
         const trimmed = line.trim();
         if (!trimmed) continue;
-        // Format is email:password or username:password or email\tpassword
         const parts = trimmed.split(/[: \t]+/);
         if (parts.length >= 2) {
           const email = parts[0];
@@ -478,7 +482,7 @@
   });
 
   // ========================================================
-  //  3. PASSWORD CHECK (HIBP k-Anonymity)
+  //  3. PASSWORD CHECK (HIBP k-Anonymity) — no proxy needed!
   // ========================================================
   async function checkPassword() {
     const password = passwordInput.value;
