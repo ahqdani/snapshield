@@ -296,10 +296,10 @@
   'use strict';
 
   // ============================================================
-  //  FIXED: Use /json instead of /raw — adds CORS headers!
-  //  The response format is: { contents: "<stringified JSON>" }
+  //  FIXED: corsproxy.io — explicitly supports github.io origins
+  //  Returns raw response (no envelope wrapping like allorigins)
   // ============================================================
-  const PROXY = 'https://api.allorigins.win/json?url=';
+  const PROXY = 'https://corsproxy.io/?url=';
 
   // ======== DOM REFS ========
   const usernameInput = document.getElementById('usernameInput');
@@ -350,9 +350,8 @@
         return;
       }
 
-      // AllOrigins wraps the response in { contents: "...", status: {...} }
-      const wrapper = await resp.json();
-      const data = JSON.parse(wrapper.contents);
+      // corsproxy.io returns the raw API response directly (no envelope)
+      const data = await resp.json();
 
       if (!data.success) {
         showStatus(userStatus, data.error || 'Search failed.', 'error');
@@ -415,14 +414,13 @@
       const resp = await fetch(PROXY + encodeURIComponent(targetUrl), { method: 'GET', mode: 'cors' });
 
       if (!resp.ok) {
-        showStatus(combStatus, 'COMB database error (' + resp.status + '). The proxy may be slow — try again.', 'error');
+        showStatus(combStatus, 'COMB database error (' + resp.status + '). Try again.', 'error');
         combBtn.disabled = false; combBtn.textContent = 'Find Passwords';
         return;
       }
 
-      // Unwrap from AllOrigins envelope
-      const wrapper = await resp.json();
-      const data = JSON.parse(wrapper.contents);
+      // corsproxy.io returns the raw API response directly
+      const data = await resp.json();
 
       const count = data.count || 0;
       const lines = data.lines || [];
