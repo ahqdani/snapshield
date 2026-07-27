@@ -188,11 +188,11 @@
     <p>Snapchat Security Auditor</p>
   </div>
 
-  <!-- ======== USERNAME BREACH SCAN (LeakCheck via Worker) ======== -->
+  <!-- ======== USERNAME BREACH SCAN (LeakCheck) ======== -->
   <div class="card">
     <div class="card-title"><span class="icon">🔍</span> Username Breach Scanner</div>
     <p class="card-subtitle">
-      Checks your Snapchat username against <strong>10+ billion</strong> leaked records via LeakCheck. Shows which breaches you appear in and what data types were exposed.
+      Checks your Snapchat username against <strong>10+ billion</strong> leaked records. Shows which breaches you appear in and what data was exposed.
     </p>
     <div class="input-group">
       <input type="text" id="usernameInput" placeholder="Enter your Snapchat username" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
@@ -206,7 +206,7 @@
     </div>
   </div>
 
-  <!-- ======== LEAKED CREDENTIALS (COMB via Worker — EXACT MATCH ONLY) ======== -->
+  <!-- ======== LEAKED CREDENTIALS (EXACT MATCH ONLY) ======== -->
   <div class="card">
     <div class="card-title"><span class="icon">📋</span> Leaked Credential Search (COMB)</div>
     <p class="card-subtitle">
@@ -232,7 +232,7 @@
   <div class="card">
     <div class="card-title"><span class="icon">🔑</span> Password Leak Check</div>
     <p class="card-subtitle">
-      Your password is hashed in-browser. Only 5 characters of the SHA-1 hash are sent — the full password <strong>never leaves your device</strong>. Uses Have I Been Pwned's k-anonymity API.
+      Your password is hashed in-browser. Only 5 characters of the SHA-1 hash are sent — the full password <strong>never leaves your device</strong>.
     </p>
     <div class="input-group">
       <div class="pwd-wrapper">
@@ -287,10 +287,9 @@
   'use strict';
 
   // ================================================================
-  //  🔧 FIX THIS: Paste your Cloudflare Worker URL here
-  //  Example: https://snapshield-proxy.your-name.workers.dev
+  //  YOUR WORKER URL — already set!
   // ================================================================
-  const WORKER = 'https://snapshield-proxy.ahqureshi69.workers.dev/';
+  const WORKER = 'https://snapshield-proxy.ahqureshi69.workers.dev';
 
   // ======== DOM REFS ========
   const usernameInput = document.getElementById('usernameInput');
@@ -333,7 +332,7 @@
       const resp = await fetch(url);
 
       if (!resp.ok) {
-        showStatus(userStatus, 'LeakCheck error (' + resp.status + '). Make sure your Worker URL is correct.', 'error');
+        showStatus(userStatus, 'LeakCheck error (' + resp.status + ').', 'error');
         scanBtn.disabled = false; scanBtn.textContent = 'Scan Breaches';
         return;
       }
@@ -379,7 +378,7 @@
   }
 
   // ========================================================
-  //  2. LEAKED CREDENTIALS (COMB via Worker — EXACT MATCH)
+  //  2. LEAKED CREDENTIALS (COMB — EXACT MATCH ONLY)
   // ========================================================
   async function searchComb() {
     const query = combInput.value.trim().toLowerCase();
@@ -405,16 +404,13 @@
       const lines = data.lines || [];
 
       // ===== EXACT MATCH FILTER =====
-      // Only keep entries where the username part (before @) 
-      // matches the search query exactly (case-insensitive)
       const exactMatches = [];
       for (const line of lines) {
         const trimmed = line.trim();
         if (!trimmed) continue;
         const parts = trimmed.split(/[: \t]+/);
         if (parts.length >= 2) {
-          const emailOrUser = parts[0].toLowerCase();
-          const usernamePart = emailOrUser.split('@')[0];
+          const usernamePart = parts[0].toLowerCase().split('@')[0];
           if (usernamePart === query) {
             exactMatches.push(trimmed);
           }
@@ -468,7 +464,7 @@
   });
 
   // ========================================================
-  //  3. PASSWORD CHECK (HIBP — direct, works natively)
+  //  3. PASSWORD CHECK (HIBP — direct, no proxy needed)
   // ========================================================
   async function checkPassword() {
     const password = passwordInput.value;
