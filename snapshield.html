@@ -296,10 +296,9 @@
   'use strict';
 
   // ============================================================
-  //  FIXED: corsproxy.io — explicitly supports github.io origins
-  //  Returns raw response (no envelope wrapping like allorigins)
+  //  NO PROXY NEEDED — CORS Unblock extension handles everything
+  //  Direct API calls below
   // ============================================================
-  const PROXY = 'https://corsproxy.io/?url=';
 
   // ======== DOM REFS ========
   const usernameInput = document.getElementById('usernameInput');
@@ -325,7 +324,7 @@
   const pwdToggle = document.getElementById('pwdToggle');
 
   // ========================================================
-  //  1. USERNAME BREACH SCAN (LeakCheck Public API)
+  //  1. USERNAME BREACH SCAN (LeakCheck Public API — direct)
   // ========================================================
   async function scanUsername() {
     const username = usernameInput.value.trim();
@@ -335,11 +334,13 @@
     scanBtn.disabled = true;
     scanBtn.textContent = 'Scanning...';
     userResults.classList.remove('show');
-    showStatus(userStatus, 'Searching breach databases via secure proxy...', 'loading');
+    showStatus(userStatus, 'Searching breach databases...', 'loading');
 
     try {
-      const targetUrl = 'https://leakcheck.io/api/public?check=' + encodeURIComponent(username);
-      const resp = await fetch(PROXY + encodeURIComponent(targetUrl), { method: 'GET', mode: 'cors' });
+      const resp = await fetch('https://leakcheck.io/api/public?check=' + encodeURIComponent(username), {
+        method: 'GET',
+        mode: 'cors'
+      });
 
       if (!resp.ok) {
         const errText = await resp.text();
@@ -350,7 +351,6 @@
         return;
       }
 
-      // corsproxy.io returns the raw API response directly (no envelope)
       const data = await resp.json();
 
       if (!data.success) {
@@ -389,7 +389,7 @@
         removeRec('rec-breach-found');
       }
     } catch (err) {
-      showStatus(userStatus, 'Network error. The proxy may be rate-limited — try again in 30 seconds.<br><small>' + esc(err.message) + '</small>', 'error');
+      showStatus(userStatus, 'Network error: ' + esc(err.message), 'error');
     }
 
     scanBtn.disabled = false;
@@ -397,7 +397,7 @@
   }
 
   // ========================================================
-  //  2. LEAKED CREDENTIAL SEARCH (ProxyNova COMB)
+  //  2. LEAKED CREDENTIAL SEARCH (ProxyNova COMB — direct)
   // ========================================================
   async function searchComb() {
     const query = combInput.value.trim();
@@ -410,18 +410,18 @@
     showStatus(combStatus, 'Querying COMB credential database (3.2B records)...', 'loading');
 
     try {
-      const targetUrl = 'https://api.proxynova.com/comb?query=' + encodeURIComponent(query) + '&start=0&limit=100';
-      const resp = await fetch(PROXY + encodeURIComponent(targetUrl), { method: 'GET', mode: 'cors' });
+      const resp = await fetch('https://api.proxynova.com/comb?query=' + encodeURIComponent(query) + '&start=0&limit=100', {
+        method: 'GET',
+        mode: 'cors'
+      });
 
       if (!resp.ok) {
-        showStatus(combStatus, 'COMB database error (' + resp.status + '). Try again.', 'error');
+        showStatus(combStatus, 'COMB database error (' + resp.status + ')', 'error');
         combBtn.disabled = false; combBtn.textContent = 'Find Passwords';
         return;
       }
 
-      // corsproxy.io returns the raw API response directly
       const data = await resp.json();
-
       const count = data.count || 0;
       const lines = data.lines || [];
 
@@ -457,7 +457,7 @@
       addRec('rec-comb-found', '🔴', '<strong style="color:#fca5a5;">Leaked passwords found.</strong> Your credentials appear in the COMB dataset. Change your password on every site where you use this combination. Do not reuse passwords.');
 
     } catch (err) {
-      showStatus(combStatus, 'Network error. The proxy may be rate-limited — try again in 30 seconds.<br><small>' + esc(err.message) + '</small>', 'error');
+      showStatus(combStatus, 'Network error: ' + esc(err.message), 'error');
     }
 
     combBtn.disabled = false;
@@ -480,7 +480,7 @@
   });
 
   // ========================================================
-  //  3. PASSWORD CHECK (HIBP k-Anonymity) — no proxy needed!
+  //  3. PASSWORD CHECK (HIBP k-Anonymity — direct)
   // ========================================================
   async function checkPassword() {
     const password = passwordInput.value;
