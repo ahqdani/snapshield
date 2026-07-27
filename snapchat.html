@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SnapShield — Snapchat Security Auditor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2306b6d4'/%3E%3Cpath d='M32 10 51 18v13c0 12-8 19-19 23C21 50 13 43 13 31V18l19-8Z' fill='%230a0e17'/%3E%3Cpath d='m23 32 6 6 13-14' fill='none' stroke='%2367e8f9' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -185,47 +186,33 @@
 
   <div class="header">
     <h1>🔐 SnapShield</h1>
-    <p>Snapchat Security Auditor — with leaked credential reveal</p>
+    <p>Snapchat Security Auditor — privacy-first account checks</p>
   </div>
 
-  <!-- ======== USERNAME BREACH SCAN (LeakCheck) ======== -->
+  <!-- ======== USERNAME BREACH CHECK (LeakCheck) ======== -->
   <div class="card">
-    <div class="card-title"><span class="icon">🔍</span> Username Breach Scanner</div>
+    <div class="card-title"><span class="icon">🔍</span> Username Breach Check</div>
     <p class="card-subtitle">
-      Checks your Snapchat username against <strong>10+ billion</strong> leaked records via LeakCheck. Shows which breaches you appear in and what data types were exposed.
+      Opens LeakCheck so you can check a Snapchat username on the provider's site. Your username is never sent through an untrusted CORS proxy.
     </p>
     <div class="input-group">
       <input type="text" id="usernameInput" placeholder="Enter your Snapchat username" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-      <button id="scanBtn">Scan Breaches</button>
+      <button id="scanBtn">Open LeakCheck</button>
     </div>
     <div id="userStatus" class="status"></div>
-    <div id="userResults" class="result-section">
-      <hr class="divider">
-      <div id="breachSources"></div>
-      <div id="exposedFields"></div>
-    </div>
   </div>
 
   <!-- ======== LEAKED CREDENTIALS (ProxyNova COMB) ======== -->
   <div class="card">
     <div class="card-title"><span class="icon">📋</span> Leaked Credential Search (COMB)</div>
     <p class="card-subtitle">
-      Searches the <strong>3.2 billion</strong> credential COMB dataset via ProxyNova for <strong>actual leaked password pairs</strong> matching your username. These are real credentials — change any matching passwords immediately.
+      Opens ProxyNova's COMB tool for a provider-hosted search. SnapShield does not transmit the search term or expose leaked passwords on this page.
     </p>
     <div class="input-group">
       <input type="text" id="combInput" placeholder="Username or email to search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-      <button id="combBtn">Find Passwords</button>
+      <button id="combBtn">Open COMB Search</button>
     </div>
     <div id="combStatus" class="status"></div>
-    <div id="combResults" class="result-section">
-      <hr class="divider">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-        <span style="font-size:13px;color:var(--text-dim);font-weight:500;">Exposed Credentials (email : password)</span>
-        <button id="combRevealBtn" class="show-creds-btn">👁 Show Passwords</button>
-      </div>
-      <div id="combTableContainer" class="creds-hidden"></div>
-      <div id="combCount" class="cred-count"></div>
-    </div>
   </div>
 
   <!-- ======== PASSWORD LEAK CHECK (HIBP) ======== -->
@@ -278,16 +265,16 @@
   <div class="card">
     <div class="card-title"><span class="icon">🔗</span> Snapchat Security Quick Links</div>
     <div class="quick-links">
-      <a class="quick-link" href="https://accounts.snapchat.com" target="_blank">🌐 Account Dashboard</a>
-      <a class="quick-link" href="https://help.snapchat.com/hc/en-us/articles/7012305621908" target="_blank">📖 Compromised Account Help</a>
-      <a class="quick-link" href="https://haveibeenpwned.com" target="_blank">⚠️ Have I Been Pwned</a>
-      <a class="quick-link" href="https://www.proxynova.com/tools/comb/" target="_blank">🕵️ ProxyNova COMB</a>
+      <a class="quick-link" href="https://accounts.snapchat.com" target="_blank" rel="noopener noreferrer">🌐 Account Dashboard</a>
+      <a class="quick-link" href="https://help.snapchat.com/hc/en-us/articles/7012305621908" target="_blank" rel="noopener noreferrer">📖 Compromised Account Help</a>
+      <a class="quick-link" href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer">⚠️ Have I Been Pwned</a>
+      <a class="quick-link" href="https://www.proxynova.com/tools/comb/" target="_blank" rel="noopener noreferrer">🕵️ ProxyNova COMB</a>
     </div>
   </div>
 
   <div class="footer" style="text-align:center;padding:20px 0 10px;font-size:12px;color:var(--text-dim);">
-    <p>Powered by <a href="https://leakcheck.io" target="_blank" style="color:var(--accent);">LeakCheck</a> · <a href="https://www.proxynova.com/tools/comb/" target="_blank" style="color:var(--accent);">ProxyNova COMB</a> · <a href="https://haveibeenpwned.com" target="_blank" style="color:var(--accent);">Have I Been Pwned</a></p>
-    <p style="margin-top:4px;">All checks run in your browser. No data stored or logged.</p>
+    <p>Powered by <a href="https://leakcheck.io" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">LeakCheck</a> · <a href="https://www.proxynova.com/tools/comb/" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">ProxyNova COMB</a> · <a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Have I Been Pwned</a></p>
+    <p style="margin-top:4px;">Password hashing runs in your browser. Provider searches open on their own sites.</p>
   </div>
 </div>
 
@@ -295,24 +282,14 @@
 (function() {
   'use strict';
 
-  // Free CORS proxy for file:// origins
-  const PROXY = 'https://api.allorigins.win/raw?url=';
-
   // ======== DOM REFS ========
   const usernameInput = document.getElementById('usernameInput');
   const scanBtn = document.getElementById('scanBtn');
   const userStatus = document.getElementById('userStatus');
-  const userResults = document.getElementById('userResults');
-  const breachSources = document.getElementById('breachSources');
-  const exposedFields = document.getElementById('exposedFields');
 
   const combInput = document.getElementById('combInput');
   const combBtn = document.getElementById('combBtn');
   const combStatus = document.getElementById('combStatus');
-  const combResults = document.getElementById('combResults');
-  const combTableContainer = document.getElementById('combTableContainer');
-  const combCount = document.getElementById('combCount');
-  const combRevealBtn = document.getElementById('combRevealBtn');
 
   const passwordInput = document.getElementById('passwordInput');
   const pwdCheckBtn = document.getElementById('pwdCheckBtn');
@@ -322,160 +299,28 @@
   const pwdToggle = document.getElementById('pwdToggle');
 
   // ========================================================
-  //  1. USERNAME BREACH SCAN (LeakCheck Public API)
+  //  1. USERNAME BREACH CHECK (provider-hosted)
   // ========================================================
-  async function scanUsername() {
+  function scanUsername() {
     const username = usernameInput.value.trim();
     if (!username) { showStatus(userStatus, 'Please enter a Snapchat username.', 'error'); return; }
     if (username.length < 3) { showStatus(userStatus, 'Username must be at least 3 characters.', 'error'); return; }
 
-    scanBtn.disabled = true;
-    scanBtn.textContent = 'Scanning...';
-    userResults.classList.remove('show');
-    showStatus(userStatus, 'Searching breach databases via secure proxy...', 'loading');
-
-    try {
-      const targetUrl = 'https://leakcheck.io/api/public?check=' + encodeURIComponent(username);
-      const resp = await fetch(PROXY + encodeURIComponent(targetUrl), { method: 'GET', mode: 'cors' });
-
-      if (!resp.ok) {
-        const errText = await resp.text();
-        let msg = 'Server error (' + resp.status + ')';
-        try { const j = JSON.parse(errText); if (j.error) msg = j.error; } catch(e) {}
-        showStatus(userStatus, msg, 'error');
-        scanBtn.disabled = false; scanBtn.textContent = 'Scan Breaches';
-        return;
-      }
-
-      const data = await resp.json();
-
-      if (!data.success) {
-        showStatus(userStatus, data.error || 'Search failed.', 'error');
-        scanBtn.disabled = false; scanBtn.textContent = 'Scan Breaches';
-        return;
-      }
-
-      if (data.found > 0) {
-        userStatus.className = 'status danger show';
-        userStatus.innerHTML = `<span class="stat-number">${data.found}</span> breach source${data.found !== 1 ? 's' : ''} found for this username`;
-
-        let html = '<div style="font-size:13px;color:var(--text-dim);margin-bottom:6px;font-weight:500;">Breach Sources:</div>';
-        html += '<div class="breach-list">';
-        for (const src of data.sources) {
-          html += `<div class="breach-item"><span class="breach-name">${esc(src.name)}</span><span class="breach-date">${esc(src.date || 'Unknown')}</span></div>`;
-        }
-        html += '</div>';
-        breachSources.innerHTML = html;
-
-        if (data.fields && data.fields.length > 0) {
-          let fh = '<div style="font-size:13px;color:var(--text-dim);margin-top:14px;margin-bottom:4px;font-weight:500;">Exposed Data Categories:</div><div class="fields-tags">';
-          for (const f of data.fields) fh += `<span class="field-tag">${esc(f)}</span>`;
-          fh += '</div>';
-          exposedFields.innerHTML = fh;
-        } else {
-          exposedFields.innerHTML = '';
-        }
-
-        userResults.classList.add('show');
-        addRec('rec-breach-found', '🔴', '<strong style="color:#fca5a5;">Breach detected.</strong> Your username appears in leaked data. If you reused this password anywhere, change it immediately. Enable 2FA.');
-      } else {
-        userStatus.className = 'status success show';
-        userStatus.innerHTML = '✅ <strong>No breaches found</strong> — this username does not appear in known breach databases.';
-        userResults.classList.remove('show');
-        removeRec('rec-breach-found');
-      }
-    } catch (err) {
-      showStatus(userStatus, 'Network error. The proxy may be rate-limited — try again in 30 seconds.<br><small>' + esc(err.message) + '</small>', 'error');
-    }
-
-    scanBtn.disabled = false;
-    scanBtn.textContent = 'Scan Breaches';
+    showStatus(userStatus, 'LeakCheck does not permit this static site to query its API directly. Opening the provider so you can run the check securely there.', 'warn');
+    window.open('https://leakcheck.io/', '_blank', 'noopener,noreferrer');
   }
 
   // ========================================================
-  //  2. LEAKED CREDENTIAL SEARCH (ProxyNova COMB)
+  //  2. LEAKED CREDENTIAL CHECK (provider-hosted)
   // ========================================================
-  async function searchComb() {
+  function searchComb() {
     const query = combInput.value.trim();
     if (!query) { showStatus(combStatus, 'Enter a username or email to search.', 'error'); return; }
     if (query.length < 3) { showStatus(combStatus, 'Query must be at least 3 characters.', 'error'); return; }
 
-    combBtn.disabled = true;
-    combBtn.textContent = 'Searching...';
-    combResults.classList.remove('show');
-    showStatus(combStatus, 'Querying COMB credential database (3.2B records)...', 'loading');
-
-    try {
-      const targetUrl = 'https://api.proxynova.com/comb?query=' + encodeURIComponent(query) + '&start=0&limit=100';
-      const resp = await fetch(PROXY + encodeURIComponent(targetUrl), { method: 'GET', mode: 'cors' });
-
-      if (!resp.ok) {
-        showStatus(combStatus, 'COMB database error (' + resp.status + ')', 'error');
-        combBtn.disabled = false; combBtn.textContent = 'Find Passwords';
-        return;
-      }
-
-      const data = await resp.json();
-
-      const count = data.count || 0;
-      const lines = data.lines || [];
-
-      if (count === 0 || lines.length === 0) {
-        showStatus(combStatus, '✅ <strong>No leaked credentials found</strong> for this query in the COMB dataset.', 'success');
-        combResults.classList.remove('show');
-        combBtn.disabled = false; combBtn.textContent = 'Find Passwords';
-        return;
-      }
-
-      // Show results
-      combResults.classList.add('show');
-      showStatus(combStatus, `<span class="stat-number" style="color:var(--warn)">${count.toLocaleString()}</span> total credential${count !== 1 ? 's' : ''} found (showing up to ${Math.min(lines.length, 100)})`, 'warn');
-
-      // Build table
-      let tableHtml = '<table class="cred-table">';
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-        // Format is email:password or username:password or email\tpassword
-        const parts = trimmed.split(/[: \t]+/);
-        if (parts.length >= 2) {
-          const email = parts[0];
-          const pwd = parts.slice(1).join(':');
-          tableHtml += `<tr><td>${esc(email)}</td><td>${esc(pwd)}</td></tr>`;
-        } else {
-          tableHtml += `<tr><td colspan="2" style="color:var(--text-dim)">${esc(trimmed)}</td></tr>`;
-        }
-      }
-      tableHtml += '</table>';
-      combTableContainer.innerHTML = tableHtml;
-      combTableContainer.classList.remove('revealed');
-      combTableContainer.classList.add('creds-hidden');
-      combCount.textContent = `Showing ${Math.min(lines.length, 100)} of ${count.toLocaleString()} total matches.`;
-
-      addRec('rec-comb-found', '🔴', '<strong style="color:#fca5a5;">Leaked passwords found.</strong> Your credentials appear in the COMB dataset. Change your password on every site where you use this combination. Do not reuse passwords.');
-
-    } catch (err) {
-      showStatus(combStatus, 'Network error. The proxy may be rate-limited — try again in 30 seconds.<br><small>' + esc(err.message) + '</small>', 'error');
-    }
-
-    combBtn.disabled = false;
-    combBtn.textContent = 'Find Passwords';
+    showStatus(combStatus, 'ProxyNova does not permit this static site to query its API directly. Opening the provider without transmitting your search term.', 'warn');
+    window.open('https://www.proxynova.com/tools/comb/', '_blank', 'noopener,noreferrer');
   }
-
-  // Toggle credential visibility
-  let credsRevealed = false;
-  combRevealBtn.addEventListener('click', () => {
-    credsRevealed = !credsRevealed;
-    if (credsRevealed) {
-      combTableContainer.classList.add('revealed');
-      combTableContainer.classList.remove('creds-hidden');
-      combRevealBtn.textContent = '🙈 Hide Passwords';
-    } else {
-      combTableContainer.classList.remove('revealed');
-      combTableContainer.classList.add('creds-hidden');
-      combRevealBtn.textContent = '👁 Show Passwords';
-    }
-  });
 
   // ========================================================
   //  3. PASSWORD CHECK (HIBP k-Anonymity)
@@ -567,11 +412,6 @@
       rec.innerHTML = `<span class="rec-icon">${icon}</span><div class="rec-text">${html}</div>`;
       container.prepend(rec);
     }
-  }
-
-  function removeRec(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
   }
 
   // ========================================================
